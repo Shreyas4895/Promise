@@ -7,6 +7,7 @@ function Coins() {
   const [coins, setRes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [coin, setCoin] = useState({});
+  const [showTable, setShowTable] = useState(false);
 
   const fetchCoins = async () => {
     setIsLoading(true);
@@ -32,7 +33,6 @@ function Coins() {
   };
 
   const fetchCoin = async (data) => {
-    console.log("in coins", data);
     const options = {
       method: "GET",
       params: { referenceCurrencyUuid: data, timePeriod: "24h" },
@@ -46,6 +46,7 @@ function Coins() {
       .then((response) => response.json())
       .then(({ data: { coin } }) => {
         setCoin(coin);
+        setShowTable(true);
       })
       .catch((error) => console.error(error));
   };
@@ -55,7 +56,13 @@ function Coins() {
       heading: "Rank",
     },
     {
+      heading: "Icon",
+    },
+    {
       heading: "Name",
+    },
+    {
+      heading: "Symbol",
     },
     {
       heading: "Price",
@@ -64,36 +71,41 @@ function Coins() {
       heading: "Market Cap",
     },
     {
-      heading: "Price",
-    },
-    {
       heading: "Listed At",
     },
   ];
 
   return (
-    <div>
-      <button onClick={fetchCoins} disabled={isLoading}>
-        Fetch Data
-      </button>
-      {isLoading && <Loding />}
+    <div className="main">
+      <div className="buttonContainer">
+        <button className="button" onClick={fetchCoins} disabled={isLoading}>
+          Fetch Data
+        </button>
+
+        {isLoading && <Loding />}
+      </div>
       {/* {<Coin coins={coins}/>} */}
       <div>
-        <table>
+        <table className="table">
           <thead>
-            {columns.map((item) => (
-              <th>{item.heading}</th>
-            ))}
+            <tr>
+              {columns.map((item, i) => (
+                <th className="header" key={i}>
+                  {item.heading}
+                </th>
+              ))}
+            </tr>
           </thead>
           <tbody>
-            {coins.map((item, index) => {
+            {coins.map((item, i) => {
               return (
-                <tr>
+                <tr key={i}>
                   <Coin
                     handleCoinClick={(data) => fetchCoin(data)}
                     key={item.uuid}
                     details={item}
                     coin={coin}
+                    showTable={showTable}
                   />
                 </tr>
               );

@@ -7,16 +7,12 @@ function Coin(props) {
     <>
       <PropCoin
         handleClick={(uuid) => props.handleCoinClick(uuid)}
-        name={item.name}
-        uuid={item.uuid}
-        iconUrl={item.iconUrl}
-        symbol={item.symbol}
-        price={item.price}
-        marketCap={item.marketCap}
-        rank={item.rank}
+        item={item}
+        coin={props.coin}
+        showTable={props.showTable}
       />
       {item.uuid === props.coin.uuid && (
-        <p className="para">{props.coin.uuid}</p>
+        <td className="para">{props.coin.uuid}</td>
       )}
     </>
   );
